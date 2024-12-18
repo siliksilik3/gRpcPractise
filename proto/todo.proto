@@ -1,0 +1,55 @@
+syntax= "proto3";
+
+package todo;
+
+service TodoService { // buissnes logic
+    rpc PostTodo(PostTodoDTO) returns /* no return */ (Todo) {} // we will create posts so need DTO file! Located in same proto file!
+    rpc GetTodos(Empty) /* Empty if dont need any arguments */ returns (Todos) {} // we expect to return ToDos when try to Get them
+
+}
+
+message Todo { // message it's basicly interface or type!
+    int32 id=1; // 1 2 3 just an order not a value
+    string description=2;
+    bool isDone=3;
+}
+
+message Todos {
+    repeated Todo Todos=1; // same (repeated) Todo but many
+}
+
+message PostTodoDTO {
+    string description=1;
+    bool isDone=2;
+}
+
+message Empty {} // we habe Empty arg so here just specify Empty empty! lul
+
+
+// protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/todo.proto
+// comand to generete TS file in same proto folder
+
+// After must be changed nest-cli.jsno !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// "projects": {
+//     "micro": {
+//       "type": "application",
+//       "root": "apps/micro",
+//       "entryFile": "src/main", // from main to -> src/main that makes to add assets
+//       "sourceRoot": "./", // apps/micro/src change to -> ./
+//       "compilerOptions": { 
+//         "tsConfigPath": "apps/micro/tsconfig.app.json",
+//         "assets": ["proto/*.proto"],
+//         "watchAssets": true  // auto update
+//       }
+//     },
+//     "todo": {
+//       "type": "application",
+//       "root": "apps/todo",
+//       "entryFile": "src/main", // from main to -> src/main that makes to add assets
+//       "sourceRoot": "./", // apps/micro/src change to -> ./
+//       "compilerOptions": { 
+//         "tsConfigPath": "apps/todo/tsconfig.app.json",
+//         "assets": ["proto/*.proto"],
+//         "watchAssets": true  // auto update
+//       }
+//     }
