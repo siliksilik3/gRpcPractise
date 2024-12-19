@@ -8,9 +8,9 @@ import { Queue } from 'bull';
 @Injectable()
 export class TodoService {
   constructor(
-    private prisma: PrismaService,
+    private prisma: PrismaService, // Внедрение PrismaService
     @InjectQueue(UPDATE_QUEUE) private readonly updateQueue: Queue,
-  ) {} // Внедрение PrismaService
+  ) {}
 
   async getTodos() {
     return this.prisma.toDo.findMany(); // Используем Prisma для получения всех задач
@@ -18,10 +18,7 @@ export class TodoService {
 
   async postTodo(postTodoDTO: PostTodoDTO) {
     return this.prisma.toDo.create({
-      data: {
-        description: postTodoDTO.description,
-        isDone: postTodoDTO.isDone,
-      },
+      data: postTodoDTO,
     }); // Создание новой задачи в базе данных
   }
   async updateStatus(id: number) {
